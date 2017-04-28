@@ -1,0 +1,11 @@
+<div class="show-more-widget">
+    <div ng-style='showLessStyle' ng-hide='expanded' ng-transclude>
+    </div>
+    <div ng-show='expanded' ng-transclude>
+    </div>
+    
+    <div class="col-md-12">
+        <button type="button" class="arrow pull-right btn-icon" ng-hide='expanded || !expandable' ng-click='expanded = !expanded' localize><span class="glyphicon glyphicon-menu-down"></span></button>
+        <button type="button" class="arrow pull-right btn-icon" ng-show='expanded && expandable' ng-click='expanded = !expanded'><span class="glyphicon glyphicon-menu-up"></span></button>
+    </div>
+</div>

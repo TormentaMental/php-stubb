@@ -38,4 +38,13 @@ class Stack extends Model
                     $query->select('id');
                 }]);
     }
+    
+    public function scopeWithUsers($query) {
+        
+        return  $query
+            ->with(['users' => function($query) {
+                return $query->select(['id', 'name', 'avatar'])->take(3);
+            }])
+            ->withCount(['users']);
+    }
 }

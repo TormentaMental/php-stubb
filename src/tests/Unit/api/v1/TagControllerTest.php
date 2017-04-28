@@ -65,12 +65,11 @@ class TagControllerTest extends TestCase
     /**
      * Delete tag
      * 
-     * @depends testGetTag
      * @return void
      */
-    public function testDeleteTag(int $tag_id)
+    public function testDeleteTag()
     {
-        $response = $this->delete($this->api.'/tags/' . $tag_id);
+        $response = $this->delete($this->api.'/tags/1');
         $this->assertEquals(204, $response->status(), 'Response code must be 204 No Content');
     }
 }

@@ -10,7 +10,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <link href='//fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
         <link href="http://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
@@ -24,25 +23,39 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-route.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-sanitize.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-resource.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-cookies.min.js"></script>
+        <script src="src/node_modules/marked/lib/marked.js"></script>
+        <script src="src/node_modules/angular-marked/dist/angular-marked.js"></script>
+        <script src="src/node_modules/angular-modal-service/dst/angular-modal-service.min.js"></script>
+        <script src="src/node_modules/angular-translate/dist/angular-translate.min.js"></script>
+        <script src="src/node_modules/angular-translate/dist/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+        <script src="src/node_modules/angular-translate/dist/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js"></script>
         <script src="src/app.js"></script>
+      
+        <script>
+        window.Laravel = {!! json_encode([
+            'csrfToken' => csrf_token()
+        ]) !!};
+    </script>
     </head>
     <body>
         <div class="container" ng-controller="LayoutController">
 
-            <header class="margin-bottom-lg clearfix" ng-controller="HeaderController">
+            <header class="margin-bottom-lg clearfix" ng-controller="HeaderController"> 
 
                 <div class="col-md-8 text-left">
                     <h1 class="col-md-12"><img src="img/logo.png" alt="logo" /> Stubb.</h1>
-                    <div class="col-md-1"></div><div class="col-md-11" ng-bind="translations.subtitle"></div>
+                    <div class="col-md-1"></div><div class="col-md-11" translate="translations.home.header.subtitle"></div>
                 </div>
-
-                <div class="col-md-4 text-right">
+                
+                <div class="col-md-4 text-right profile-area">
 
                     <div class="navbar navbar-default pull-right" role="navigation">
                         <ul class="nav navbar-nav">
                             <li>
-                                <ng-include src="'/src/app_modules/common/templates/session-template.html'"></ng-include>
-                                <form id="logout-form" action="{{ route('logout')}}" method="POST" style="display: none;">{{ csrf_field()}}</form>
+                                <session-dropdown data='{{ Auth::user() }}'></session-dropdown>                                
                             </li>
                             <li>
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">

@@ -1,0 +1,57 @@
+{
+    "version": "1",
+    "translations": {
+        "home": {            
+            "header": {
+                "subtitle": "Simply hash your notes and navigate them",
+                "session": {
+                    "update_info": "Update info",
+                    "logout": "Logout"
+                }
+            },
+            "content": {
+                "write_something": "Write something and hash it...",
+                "filters": {
+                    "date_modified": "Date Modified",
+                    "date_created": "Date Created",
+                    "name": "Name"
+                },
+                "no_results": "No results",
+                "cards": {
+                    "tags": {
+                        "placeholder": "Name it..."
+                    }
+                }
+            },
+            "sidebar": {
+                "searcher": {
+                    "quick_search": "Quick Search..."
+                },
+                "stacks": {
+                    "title": "Stacks"
+                },
+                "tag-cloud": {
+                    "title": "In this page"
+                }
+            },
+            "modals": {
+                "new_stack": {
+                    "placeholders": {
+                        "name": "Stack title...",
+                        "description": "Optional description..."
+                    }
+                }
+            },
+            "buttons": {
+                "save": "Save",
+                "cancel": "Cancel",
+                "submit": "Submit",
+                "delete": "Delete",
+                "pin": "Pin",
+                "edit": "Edit",
+                "as_html": "View as Rich Text",
+                "new_tag": "New Tag"
+            }
+        }
+    }
+}

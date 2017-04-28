@@ -16,13 +16,15 @@ class CreateCardStackTable extends Migration
     {
         Schema::create('card_stack', function (Blueprint $table) {
 
-            $table->integer('card_id')->unsigned()->nullable();
+            $table->integer('card_id')->unsigned()->nullable()->index();
             $table->foreign('card_id')->references('id')
                 ->on('cards')->onDelete('cascade');
 
-            $table->integer('stack_id')->unsigned()->nullable();
+            $table->integer('stack_id')->unsigned()->nullable()->index();
             $table->foreign('stack_id')->references('id')
                 ->on('stacks')->onDelete('cascade');
+            
+            $table->primary(['card_id', 'stack_id']);
         });
     }
 

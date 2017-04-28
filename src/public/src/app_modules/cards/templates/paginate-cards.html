@@ -1,0 +1,11 @@
+<ul class="pagination">
+    <li>
+        <a ng-disabled="pages.prev_page_url === null" data-page="{{ pages.current_page-1 }}" ng-click="navigate($event)" class="previous pull-left cast-shadow"><span class="glyphicon glyphicon-menu-left"></span></a>
+    </li>
+    <li class="current-page">
+        <span>{{ pages.current_page }}</span>
+    </li>
+    <li>
+        <a ng-disabled="pages.next_page_url === null" data-page="{{ pages.current_page+1 }}" ng-click="navigate($event)" class="next pull-right cast-shadow"><span class="glyphicon glyphicon-menu-right"></span></a>
+    </li>
+</ul>

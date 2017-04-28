@@ -12,7 +12,8 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
     
     protected $api = '/api/v1';
-    
+    protected $user = null; 
+        
     protected function setUp()
     {
         parent::setUp();
@@ -23,6 +24,9 @@ abstract class TestCase extends BaseTestCase
         Artisan::call('migrate');
         
         Artisan::call('db:seed');
+        
+        $this->user = \App\User::find(1);
+        $this->actingAs($this->user, 'api');
     }
 
     protected function tearDown()

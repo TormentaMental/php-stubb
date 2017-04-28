@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'avatar'
     ];
 
     /**
@@ -32,5 +32,10 @@ class User extends Authenticatable
     public function stacks()
     {
         return $this->belongsToMany('App\Stack');
+    }
+
+    public function cards()
+    {
+        return $this->belongsToMany('App\Card');
     }
 }

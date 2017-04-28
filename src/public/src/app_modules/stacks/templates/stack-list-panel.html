@@ -1,0 +1,20 @@
+<div class="panel panel-default no-border stack-list">
+    <div class="panel-heading">
+        <h4><span translate="translations.home.sidebar.stacks.title"></span> <button class="btn btn-icon pull-right" ng-click="addNew()"><span class="glyphicon glyphicon-plus"></span></button><p></p></h4>
+    </div>
+    <div class="panel-body no-padding">
+        <ul class="list-group">
+            <li class="list-group-item " ng-if="stacks" ng-repeat="stack in stacks" ng-class="{selected: stack.id == current_stack}">
+                <a href="{{ stack.id }}" ng-click="filter($event, stack.id)" class="col-md-6" title="{{ stack.name }}">
+                    <span class="name">{{ stack.name }}</span>
+                </a>
+                <ul class="participants col-md-6 text-right">
+                    <li ng-if="stack.users_count > 0" ng-repeat="user in stack.users">
+                        <img ng-if="user.avatar" ng-src="{{ img_folder }}/{{ user.avatar }}" alt="{{ user.name }}" title="{{ user.name }}" />
+                    </li>
+                    <li ng-if="stack.users_count > 3">and {{ stack.users_count - 3 }} more</li>
+                </ul>
+            </li>                 
+        </ul>
+    </div>
+</div>

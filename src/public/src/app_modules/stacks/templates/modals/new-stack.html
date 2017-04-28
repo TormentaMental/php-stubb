@@ -1,0 +1,25 @@
+<div id="new-stack-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <input type="text" name="name" ng-model="form.name" autofocus 
+               translate-attr="{ placeholder: 'translations.home.modals.new_stack.placeholders.name' }" placeholder="" />
+      </div>
+      <div class="modal-body">          
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <textarea class="form-control margin-bottom-md" name="content" ng-model="form.description" 
+                              translate-attr="{ placeholder: 'translations.home.modals.new_stack.placeholders.description' }" placeholder=""></textarea>
+                </div>
+            </div>                 
+      </div>
+      <div class="modal-footer">
+        <button type="button" ng-click="close(false)" class="btn btn-default cast-shadow" data-dismiss="modal" translate-attr="{ title: 'translations.home.buttons.cancel' }">Cancel</button>
+        <button type="button" ng-click="close(true)" class="btn btn-primary cast-shadow" data-dismiss="modal" translate-attr="{ title: 'translations.home.buttons.submit' }">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>

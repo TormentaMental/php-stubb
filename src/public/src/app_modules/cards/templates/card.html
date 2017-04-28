@@ -1,0 +1,30 @@
+<div class="panel panel-default cast-shadow">                        
+    <div class="panel-body" show-more show-more-height='150'>
+        <div class="col-md-11"> 
+            <h3 ng-if="card.name" ng-bind-html="card.name" hashtagify 
+                term-click="tagTermClick($event)" user-click="tagUserClick($event)"></h3> 
+
+            <div class="card-content" ng-bind-html="card.content | linky" hashtagify 
+                 term-click="tagTermClick($event)" user-click="tagUserClick($event)"></div>
+        </div>
+        <div class="col-md-1 btn-group-vertical pull-right tools">
+            <button type="button" class="btn btn-default btn-lg btn-icon" translate-attr="{ title: 'translations.home.buttons.pin' }" ng-click="pinCard(card)"><span class="glyphicon glyphicon-pushpin"></span></button>
+            <button type="button" class="btn btn-default btn-lg btn-icon" translate-attr="{ title: 'translations.home.buttons.delete' }" ng-click="delete(card)"><span class="glyphicon glyphicon-trash"></span></button>
+            <button type="button" class="btn btn-default btn-lg btn-icon" translate-attr="{ title: 'translations.home.buttons.edit' }" ng-click="edit(card)"><span class="glyphicon glyphicon-pencil"></span></button>
+            <button type="button" class="btn btn-default btn-lg btn-icon" translate-attr="{ title: 'translations.home.buttons.as_html' }" ng-click="viewAsMarkdownModal(card)"><span class="glyphicon glyphicon-eye-open"></span></button>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <ul class="text-right tag-list">
+            <li ng-repeat="tag in card.tags | limitTo:max_num_tags" class="tag">
+                <a href="{{ tag.id }}">#{{ tag.name}}</a>
+            </li>
+            <li ng-if="card.tags.length > max_num_tags">
+                <span>and <a href="#more-tags" ng-click="displayAllTags()" class="green">{{ card.tags.length - max_num_tags }} more</a></span>
+            </li>
+            <li class='add-new-widget'>
+                <new-tag data='card'></new-tag>
+            </li>
+        </ul>        
+    </div>
+</div>

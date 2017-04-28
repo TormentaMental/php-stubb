@@ -15,13 +15,15 @@ class CreateCardTagTable extends Migration
     {
         Schema::create('card_tag', function (Blueprint $table) {
        
-            $table->integer('card_id')->unsigned()->nullable();
+            $table->integer('card_id')->unsigned()->nullable()->index();
             $table->foreign('card_id')->references('id')
                 ->on('cards')->onDelete('cascade');
 
-            $table->integer('tag_id')->unsigned()->nullable();
+            $table->integer('tag_id')->unsigned()->nullable()->index();
             $table->foreign('tag_id')->references('id')
                 ->on('tags')->onDelete('cascade');
+            
+            $table->primary(['card_id', 'tag_id']);
         });
     }
 

@@ -21,7 +21,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
  * APIs
  */
 Route::group([
-    'namespace' => 'Api'
+    'namespace' => 'Api',
+    'middleware' => ['auth:api'],
     ], function () {
 
     Route::get('/', function() {
@@ -36,37 +37,60 @@ Route::group([
      * API v1
      */
     Route::group(['prefix' => 'v1', 'namespace' => 'v1'], function($app) {
-        Route::get('cards', 'CardController@index');
-        Route::get('cards/{id}', "CardController@get");
-        Route::get('cards/{id}/stacks', "CardController@get");
-        Route::get('cards/{id}/tags', "CardController@get");
-        Route::post('cards', "CardController@store");
-        Route::put('cards/{id}', "CardController@update");
-        Route::delete('cards/{id}', "CardController@destroy");
-        Route::get('cards/{id}/stacks', "CardController@get");
-
-        Route::get('users/{user_id}/stacks', 'StackUserController@index');
-        Route::get('users/{user_id}/stacks/{id}', "StackController@get");
-        Route::post('users/{user_id}/stacks', "StackController@store");
-        Route::put('users/{user_id}/stacks/{id}', "StackController@update");
-        Route::delete('users/{user_id}/stacks/{id}', "StackController@destroy");
         
-        Route::get('stacks/{id}/cards', "StackController@get");
-        Route::get('stacks/{stack_id}/cards/{card_id}', "StackController@get");
-
-        Route::get('tags', 'TagController@index');
-        Route::get('tags/{id}', 'TagController@get');
-        Route::get('tags/{id}/cards', 'TagController@get');
-        Route::post('tags', 'TagController@store');
-        Route::put('tags/{id}', 'TagController@update');
-        Route::get('tags/{id}/cards', 'TagController@get'); // TBD
-        Route::delete('tags/{id}', 'TagController@destroy');
-
-        Route::get('cards/{card_id}/tags', "CardTagController@index");
+        Route::pattern('id', '[0-9]+');
+        
+        // Basic CRUD
+        Route::resource('cards', 'CardController', ['except' => ['create', 'edit']]);
+        Route::resource('stacks', 'StackController', ['except' => ['index', 'create', 'edit']]);
+        Route::resource('tags', 'TagController', ['only' => ['index', 'show', 'destroy']]);
+                       
+        /**
+         * User stacks
+         * @overrides resource method
+         */
+        Route::get('stacks', 'StackUserController@index');
+        
+        /**
+         * ALl cards w/tags
+         */
+        Route::get('cards/tags/all', "CardTagController@index");
+        
+        /**
+         * Single card w/tags
+         */
+        Route::get('cards/{id}/tags', "CardTagController@showTags");
+        
+        /**
+         * Single tag cards
+         */
+        Route::get('tags/{id}/cards', 'CardTagController@showCards');
+        
+        /**
+         * Create tag and assign to card
+         */
         Route::post('cards/{card_id}/tags', 'CardTagController@store');
-        Route::get('cards/{card_id}/stacks', "CardStackController@index");
-        Route::post('cards/{card_id}/stacks', "CardStackController@store");
+
+        /**
+         * Stack cards
+         */
+        Route::get('stacks/{stack_id}/cards', "CardStackController@showCards");
+        
+        /**
+         * Cards stacks
+         */
+        Route::get('cards/{card_id}/stacks', "CardStackController@showStacks");
+        
+        /**
+         * Assign card to stack
+         */
         Route::put('cards/{card_id}/stacks/{stack_id}', "CardStackController@update");
+        Route::put('stacks/{stack_id}/cards/{card_id}', "CardStackController@update");
+    });
+    
+    // prevent looping
+    Route::get(Config::get('app.api_version'). '/' . Config::get('app.api_version'), function () {
+        return redirect()->to('/api');
     });
 
     // redirect to current api version

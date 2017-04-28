@@ -1,0 +1,23 @@
+<div id="edit-card-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <input type="text" name="name" ng-model="form.name" />
+      </div>
+      <div class="modal-body">          
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <textarea class="form-control margin-bottom-md" name="content" elastic-area ng-model="form.content"></textarea>
+                </div>
+            </div>                 
+      </div>
+      <div class="modal-footer">
+        <button type="button" ng-click="close(false)" class="btn btn-default cast-shadow" data-dismiss="modal">Cancel</button>
+        <button type="button" ng-click="close(true)" class="btn btn-primary cast-shadow" data-dismiss="modal">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
