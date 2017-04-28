@@ -10,9 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use \App\Http\Controllers\Api\ApiBaseController;
 use function response;
 
-class StackController extends Controller
+class StackController extends ApiBaseController
 {
     use LogHelper;
     
@@ -20,6 +21,7 @@ class StackController extends Controller
 
     function __construct(Model $repository)
     {
+        parent::__construct();
         $this->repository = $repository;
     }
 
@@ -32,9 +34,11 @@ class StackController extends Controller
      * @param int $id
      * @return json
      */
-    public function get(Request $request, int $id)
+    public function show(Request $request, int $id)
     {
         $data = [];
+        
+        $this->authorize('ownership', $this->repository->findOrFail($id));
         
         try {
 
@@ -86,6 +90,10 @@ class StackController extends Controller
             $stack->enabled = true;
 
             $stack->save();
+            
+            // assign to current user
+            $user_id = $this->authenticatedUser()->id;
+            $stack->users()->attach( $user_id );
 
         } catch (ValidationException $exc) {
             Log::error('Invalid data: ' . json_decode($request->getContent(), true));
@@ -110,6 +118,8 @@ class StackController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        $this->authorize('ownership', $this->repository->findOrFail($id));
+        
         try {
 
             // validation
@@ -144,6 +154,8 @@ class StackController extends Controller
      */
     public function destroy(int $id)
     {
+        $this->authorize('ownership', $this->repository->findOrFail($id));
+        
         try {
 
            $this->repository->destroy($id);

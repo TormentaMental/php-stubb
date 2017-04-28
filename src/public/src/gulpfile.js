@@ -38,7 +38,10 @@ gulp.task('build-js', ['config'], function () {
 
 gulp.task('build-css', function() {
   return gulp.src('app_modules/**/*.scss')
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass({
+        //outputStyle: 'compressed',
+        includePaths: ['./app_modules/']
+    }).on('error', sass.logError))
     .pipe(sourcemaps.init())
       .pipe(concat('app.css'))
     .pipe(sourcemaps.write())

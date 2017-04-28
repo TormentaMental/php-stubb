@@ -1,0 +1,16 @@
+<div class='new-tag-widget'>    
+    <span ng-show="display" class="new-tag-form ng-hide" ng-class="visibility">    
+        <input name="new-tag" type="text" translate-attr="{ placeholder: 'translations.home.content.cards.tags.placeholder' }" placeholder="" ng-model="tag.name" />
+
+        <button class="btn btn-icon btn-cancel" ng-click="hide()" translate-attr="{ title: 'translations.home.buttons.cancel' }">
+            <span class="glyphicon glyphicon-remove"></span>
+        </button>
+        <button class="btn btn-icon btn-save" ng-click="addNew()" translate-attr="{ title: 'translations.home.buttons.save' }">
+            <span class="glyphicon glyphicon-ok"></span>
+        </button>
+    </span>
+
+    <button class="btn btn-icon" ng-click="show()" translate-attr="{ title: 'translations.home.buttons.new_tag' }">
+        <span class="glyphicon glyphicon-plus"></span>
+    </button>
+</div>

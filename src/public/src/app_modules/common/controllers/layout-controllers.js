@@ -4,10 +4,6 @@
 
     function LayoutController($scope, $sce) {
 
-        $scope.translations = {
-            subtitle: 'Simply hash your notes and navigate them'
-        };            
-        
         $scope.tagUserClick = function(e) {
             var tagText = e.target.innerText;
             alert('tagUserClick, tagText: ' + tagText);

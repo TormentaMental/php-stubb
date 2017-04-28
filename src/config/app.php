@@ -182,6 +182,8 @@ return [
          * Custom Service Providers...
          */
         App\Providers\RepositoryServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
+        App\Providers\QueryServiceFactoryProvider::class,
     ],
 
     /*
@@ -230,7 +232,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
     
     /*
@@ -241,6 +243,9 @@ return [
     | Used by routes/api.php to redirect to current api version
     |
     */
-    'api_version' => 'v1'
+    'api_version' => 'v1',
+    
+    'results_per_page' => 10,    
+    'default_avatar' => 'profile-picture.png',   
 
 ];

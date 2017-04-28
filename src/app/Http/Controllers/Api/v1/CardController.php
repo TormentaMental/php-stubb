@@ -2,20 +2,22 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Card;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\ApiBaseController;
 use App\Http\Traits\LogHelper;
+use App\Services\QueryService;
 use App\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use function response;
 
 
-class CardController extends Controller
+class CardController extends ApiBaseController
 {
     use ValidatesRequests;
     use LogHelper;
@@ -24,6 +26,7 @@ class CardController extends Controller
 
     function __construct(Model $repository)
     {
+        parent::__construct();
         $this->repository = $repository;
     }
     
@@ -32,13 +35,17 @@ class CardController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request, QueryService $query)
     {
         $data = [];
         
         try {
-
-            $data = $this->repository->with('tags')->get();           
+            
+            // get order
+            $order = json_decode($request->cookie('order'));
+   
+            $data = $query->search();
+            
         } catch (\Exception $exc) {
             $this->logException($exc);
             return response()->json([ 'message' => 'There was an error retrieving the records' ], 500);
@@ -53,8 +60,10 @@ class CardController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function get(int $id)
+    public function show($id)
     {        
+        $this->authorize('ownership', $this->repository->findOrFail($id));
+        
         $data = [];
         
         try {
@@ -124,23 +133,25 @@ class CardController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        $this->authorize('ownership', $this->repository->findOrFail($id));
+        
         try {
             
             // validation
             $this->validate($request, [
                 'name' => 'max:255',
-                'content' => 'required'
+                'sticky' => 'bool'
             ]);
 
             // update existing record                
             $card = Card::find($id); 
-            $card->name = $request->input('name');
-            $card->content = $request->input('content');
-            $card->enabled = true;
+            foreach ($request->input() as $key => $input) {
+                $card->{$key} = $input;
+            }
             $card->save();
   
         } catch (ValidationException $exc) {
-            Log::error('Invalid data: ' . json_decode($request->getContent(), true));
+            Log::error('Invalid data: ' . json_decode($request->json(), true));
             return response()->json([ 'message' => 'There was a validation error' ], 400);
         } catch (\Exception $exc) {
             
@@ -159,6 +170,8 @@ class CardController extends Controller
      */
     public function destroy(int $id)
     {
+        $this->authorize('ownership', $this->repository->findOrFail($id));
+        
         try {
             
             $this->repository->destroy($id);

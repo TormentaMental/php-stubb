@@ -14,11 +14,17 @@ class RoboFile extends \Robo\Tasks
     public function install()
     {
 
+        $this->composer('update');
+        
+        $this->migrate();
+        $this->seed();
+    }
+    
+    public function migrate()
+    {
         $this->taskExec('docker exec php-stubb bash -c "cd /src && php artisan migrate"')->run();
 
         $this->say("Database tables created");
-
-        $this->seed();
     }
 
     public function seed()
@@ -28,6 +34,7 @@ class RoboFile extends \Robo\Tasks
 
         // run each seed
         foreach (new DirectoryIterator('database/seeds') as $fileInfo) {
+                
             if ($fileInfo->isFile()) {
                 $file = $fileInfo->getBasename('.php');
                 $this->say("Seeding $file");
@@ -134,6 +141,7 @@ class RoboFile extends \Robo\Tasks
     public function resetDB()
     {
         $this->emptyDB();
-        $this->install();
+        $this->migrate();
+        $this->seed();
     }
 }

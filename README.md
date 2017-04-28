@@ -4,8 +4,8 @@
 [WIP]
 
 ## What is it?
-This is an example app that I'm uploading to show to recruiters. 
-Basically, it allows you to create quick notes on any topic, and hashtag them. Then, you can easily search for notes by topic, keywords, date, etc. You also can group notes and share sets with othe users (useful for classrooms). 
+This is an example app that I'm building to show to recruiters. 
+Basically, it allows you to create quick notes on any topic, and hashtag them. Then, you can easily search for notes by topic, keywords, date, etc. You also can group notes and share sets with othe users (useful for co-learning). 
 Search is powered by Elasticsearch.
 
 ## Involved technologies
@@ -32,6 +32,13 @@ Init docker containers
 
 That may take long to download images.
 
+### Install packages
+Front:
+`npm install`
+
+Back:
+`robo composer "install"`
+
 ### Config files
 You should have two config files, one for frontend and the other for backend.
 
@@ -51,14 +58,12 @@ DB_USERNAME=postgres
 DB_PASSWORD=d4REn0LdCH4B
 ```
 
-Hint: is important to replace DB_CONNECTION to *pgsql* instead of the default *mysql*
-
 #### Create and seed DB
 Now, in order to fill the database, run:
 
 `docker exec -it php-stubb php /src/artisan migrate`
 
-`docker exec -it php-stubb bash -c "php /src/artisan db:seed --class CardsSeeder"`
+`docker exec -it php-stubb bash -c "php /src/artisan db:seed --class DatabaseSeeder"`
 
 Or alternativelly just:
 `cd app && vendor/bin/robo install`
@@ -67,7 +72,7 @@ Or alternativelly just:
 Then, navigate to:
 `http://localhost:8001/`
 
-You should see the homepage.
+You should see the login page.
 
 Hint: configure a different port if neccesary and rerun docker.
 
@@ -75,3 +80,8 @@ Hint: configure a different port if neccesary and rerun docker.
 If you want to skip the registering process, use these credentials:
 `admin@stubb.net`
 `sysadmin`
+
+## Worth mentioning
+    - PHPUnit runs with a *SQlite* DB, so there are no mockups involved.
+    - OAuth2 token is provided by Laravel Passport
+    - Login process is based on _Blade_ just because. Once inside yes, it's a SPA.

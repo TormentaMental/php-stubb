@@ -1,0 +1,10 @@
+<div class="panel panel-default tag-cloud" ng-if="tags">
+    <div class="panel-heading">
+        <h4 translate="translations.home.sidebar.tag-cloud.title"></h4>
+    </div>
+    <div class="panel-body">
+        <ul class="list-unstyled list-inline">                  
+            <li ng-repeat="tag in tags"><button class="btn btn-xs btn-info cast-shadow" >{{ tag.name }}</button></li>
+        </ul>
+    </div>
+</div>

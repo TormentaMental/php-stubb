@@ -3,6 +3,9 @@
     </div>
     <div ng-show='expanded' ng-transclude>
     </div>
-    <a class="arrow pull-right" ng-hide='expanded || !expandable' ng-click='expanded = !expanded' localize><span class="glyphicon glyphicon-menu-down"></span></a>
-    <a class="arrow pull-right" ng-show='expanded && expandable' ng-click='expanded = !expanded'><span class="glyphicon glyphicon-menu-up"></span></a>
+    
+    <div class="col-md-12">
+        <button type="button" class="arrow pull-right btn-icon" ng-hide='expanded || !expandable' ng-click='expanded = !expanded' localize><span class="glyphicon glyphicon-menu-down"></span></button>
+        <button type="button" class="arrow pull-right btn-icon" ng-show='expanded && expandable' ng-click='expanded = !expanded'><span class="glyphicon glyphicon-menu-up"></span></button>
+    </div>
 </div>

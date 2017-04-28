@@ -15,13 +15,15 @@ class CreateStackUserTable extends Migration
     {
         Schema::create('stack_user', function(Blueprint $table) {
 
-            $table->integer('stack_id')->unsigned()->nullable();
+            $table->integer('stack_id')->unsigned()->nullable()->index();
             $table->foreign('stack_id')->references('id')
                 ->on('stacks')->onDelete('cascade');
         
-            $table->integer('user_id')->unsigned()->nullable();
+            $table->integer('user_id')->unsigned()->nullable()->index();
             $table->foreign('user_id')->references('id')
                 ->on('users')->onDelete('cascade');
+            
+            $table->primary(['stack_id', 'user_id']);
         });
     }
 

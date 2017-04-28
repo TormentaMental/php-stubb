@@ -1,26 +1,35 @@
-$green_1: #b4db34; // TODO: import from main css
+@import "common/css/style.scss";
+
+@mixin glyphicon-ring($size: 34px, $border: #8eb4bf) 
+{
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+    color: white;
+    display: inline-table;
+    text-align: center;
+    background: $blue_1;
+    border: 3px solid $border;
+    vertical-align: middle;
+    padding-top: $size / 8;
+    top: 0;
+    left: 1px;
+}
 
 #homepage {
 
     textarea {
         $initialHeight: 115px;
         $border: none !important;
-        $tHeight: height .4s ease;
         
         border: none !important;
-        -webkit-box-shadow: $border;
-        -moz-box-shadow: $border;
-        -o-box-shadow: $border;
-        box-shadow: $border; 
+        @include box-shadow($border);
         
         height: $initialHeight;
         min-height: $initialHeight;
-        
-        -webkit-transition: $tHeight;
-        -moz-transition: $tHeight;
-        -ms-transition: $tHeight;
-        -o-transition: $tHeight;
-        transition: $tHeight;
+      
+        $transition: height .4s ease;
+        @include transition($transition);
         
         overflow: hidden;
     }
@@ -31,17 +40,24 @@ $green_1: #b4db34; // TODO: import from main css
     .new-card {
         padding-bottom: 10px;
     }
-
+    
+    .order-by{
+        label {
+            vertical-align: middle;
+            color: #999;
+            
+            input {
+                vertical-align: middle;
+                margin: 0;
+            }
+        }
+    }
+    
     /**
      * List 
      */
     .card {
-        $tTime: 0.4s;
-        -webkit-transition: $tTime;
-        -moz-transition: $tTime;
-        -o-transition: $tTime;
-        transition: $tTime;   
-        
+        min-height: 255px;
         position: relative;
     }
     
@@ -49,7 +65,8 @@ $green_1: #b4db34; // TODO: import from main css
         border-left: 4px solid $green_1;
         
         .panel-body {
-       
+            min-height: 220px !important;
+            
             .card-content{
                 white-space: pre-line;
             }
@@ -57,11 +74,10 @@ $green_1: #b4db34; // TODO: import from main css
             .show-more-widget {
                 cursor: pointer;
                 
-                a.arrow {
-                    color: #777;
+                .arrow {
                     font-size: 20px;
-                    right: 20px;
                     position: relative;
+                    padding: 2px 5px;
                 }
             }
         }
@@ -69,8 +85,14 @@ $green_1: #b4db34; // TODO: import from main css
         .panel-footer {
             padding: 0;
             
-            ul {
-               margin: 0 30px; 
+            ul.tag-list {
+               margin: 0 28px;
+               padding-left: 0;
+               overflow: hidden;
+               white-space: nowrap;
+               span {
+                color: #777;
+               }
             }
             li {
                 list-style-type: none;
@@ -80,8 +102,39 @@ $green_1: #b4db34; // TODO: import from main css
                     color: #5bc0de;
                 }
                 a:hover {
-                    color: #337AB7;
+                    color: $blue_1;
                     text-decoration: none;
+                }
+            }
+            li.tag {
+               
+            }
+            li.tag.ng-enter.ng-enter-active,
+            li.tag.ng-leave {
+                opacity: 1;   
+                width: 100px;
+                @include scale(1);
+                
+            }
+
+            li.tag.ng-leave.ng-leave-active,
+            li.tag.ng-enter {
+                opacity: 0;
+                width: 0;
+                $transition: all 0.3s;
+                @include transition($transition);
+                @include scale(0.1);
+            }
+            li.add-new-widget {
+                .ok .btn-save {
+                    color: $green_2;
+                    $scale: 1.2;
+                    @include scale($scale);
+                }
+                .error .btn-cancel {
+                    color: #cb6464;                    
+                    $scale: 1.2;
+                    @include scale($scale);
                 }
             }
         }
@@ -92,17 +145,8 @@ $green_1: #b4db34; // TODO: import from main css
         opacity: 0;
         visibility: hidden;
         
-        
         button {          
-            color: #777;
-            border: none;
             padding: 6px;
-            background: none;
-        }
-        
-        button:hover {          
-            color: #222;
-            background: none;
         }
     }
     
@@ -113,59 +157,176 @@ $green_1: #b4db34; // TODO: import from main css
         margin-top: 10px;
         padding: 0;
         
-        $tTime: .5s;
-        -webkit-transition: opacity $tTime ease-out, visibility $tTime;
-        -moz-transition: opacity $tTime ease-out, visibility $tTime;
-        -o-transition: opacity $tTime ease-out, visibility $tTime;
-        transition: opacity $tTime ease-out, visibility $tTime;
+        $transition: opacity .5s ease-out, visibility .5s;
+        @include transition($transition);
     }
-       
-    .no-results {
-        background: #5bc0de;
-        border-color: #5bc0de;
-        color: white;
-    }
-    
-    .card .highlighted {
-        $bg_start: #d3e49b;
-        $bg_stop: #e0f0aa;
+  
+    .card.highlighted .panel,
+    .card.sticky {
         
-        background: $bg_start;
-        background: -webkit-linear-gradient(left, $bg_start, $bg_stop);
-        background: -moz-linear-gradient(left, $bg_start, $bg_stop);
-        background: -o-linear-gradient(left, $bg_start, $bg_stop);
-        background: linear-gradient(left, $bg_start, $bg_stop);
+        .panel{
+            
+            border-left: 1px solid #ddd;
+            
+            $bg_start: #d3e49b;
+            $bg_stop: #e0f0aa;
+
+            background: $bg_start;
+            background: -webkit-linear-gradient(left, $bg_start, $bg_stop);
+            background: -moz-linear-gradient(left, $bg_start, $bg_stop);
+            background: -o-linear-gradient(left, $bg_start, $bg_stop);
+            background: linear-gradient(left, $bg_start, $bg_stop);
+            
+            .glyphicon-pushpin {
+                @include glyphicon-ring;
+            }
+        }
     }
 
     .card.ng-enter.ng-enter-active,
     .card.ng-leave {
         opacity: 1;   
-        height: 100px;
+        @include scale(1);
+        $transition: transform .4s, opacity .7s ease-out;
+        @include transition($transition);
     }
 
     .card.ng-leave.ng-leave-active,
     .card.ng-enter {
         opacity: 0;
-        height: 0;
+        @include scale(.93);
+        $transition: transform .4s, opacity .7s ease-out;
+        @include transition($transition);
+    }
+         
+    .no-results {
+        background: #5bc0de;
+        border-color: #5bc0de;
+        color: white;
+        
     }
     
+    .no-results.ng-enter.ng-enter-active,
+    .no-results.ng-leave  {
+        opacity: 1;
+        @include scale(1);
+    }
+    
+    .no-results.ng-leave.ng-leave-active,
+    .no-results.ng-enter {
+        $transition: transform 1.4s, opacity 2s ease-out;
+        @include transition($transition);
+        @include scale(.8);
+        opacity: 0;
+    }
+    
+    /**
+    * tags
+    */
+    .new-tag-widget {
+        display: inline-block;        
+        .new-tag-form {
+            width: 0;
+            overflow: hidden;
+            display: inline-block;
+            $transition: width 0.3s;
+            @include transition($transition);
+            height: 30px;
+            vertical-align: middle;
+        }
+        .new-tag-form.visible {
+            width: 248px;
+        }
+    }
+    
+    /**
+    * stacks
+    */
     .panel.stack-list{
-        .list-group-item {
+        h4 .btn-icon {
+            padding: 0;
+        }
+        .list-group-item {            
             height: 40px;
             line-height: 20px;
-        }
-        a {
-        }
-        ul.participants {
-            li {
-                list-style-type: none;
-                float: right;
-                margin: 2px;
-                font-size: 10px;
-                img {
-                    width: 16px;
+            @include scale(1);
+            
+            a {
+                height: 20px;
+                line-height: 20px;
+                overflow: hidden;
+                white-space: nowrap;
+                display: inline-block;
+                text-overflow: ellipsis;
+                
+                $transition: all .7s ease;
+                @include transition($transition);
+            }
+            ul.participants {
+                li {
+                    list-style-type: none;
+                    float: right;
+                    margin: 2px;
+                    font-size: 10px;
+                    img {
+                        width: 16px;
+                    }
                 }
             }
         }
+        .list-group-item.selected {
+           
+            $bg_start: #5bc0de;
+            $bg_stop: #79d3ee;
+            background: $bg_start;
+            background: -webkit-linear-gradient(left, $bg_start, $bg_stop);
+            background: -moz-linear-gradient(left, $bg_start, $bg_stop);
+            background: -o-linear-gradient(left, $bg_start, $bg_stop);
+            background: linear-gradient(left, $bg_start, $bg_stop);
+            
+            a {
+                font-weight: bold;
+                color: #fff;
+            }
+        }
+    }
+    
+    /**
+    * Sidebar
+    */
+    .side-column {
+        
+        .list-group-item {
+            padding: 10px 0px;
+        }
     }
 }
+
+/**
+* Modals
+*/
+#new-stack-modal textarea,
+#edit-card-modal textarea {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    @include box-shadow(none);
+    height: 220px;
+    min-height: 220px;
+    max-height: 700px;
+    
+    &:hover {
+        border: none;
+        @include box-shadow(none);
+    }
+}
+
+#new-stack-modal .modal-header input,
+#edit-card-modal .modal-header input {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 3px 15px;
+    font-size: 20px;
+}
+

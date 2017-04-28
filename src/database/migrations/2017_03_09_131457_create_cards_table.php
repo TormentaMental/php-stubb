@@ -17,6 +17,7 @@ class CreateCardsTable extends Migration
             $table->increments('id');
             $table->string('name')->nullable();
             $table->text('content');
+            $table->boolean('sticky')->default(false);
             $table->boolean('enabled')->default(true);
             $table->timestamps();
         });

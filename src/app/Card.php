@@ -22,7 +22,12 @@ class Card extends Model
         static::addGlobalScope(new EnabledScope);
     }
 
-    public function stack()
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
+    }
+    
+    public function stacks()
     {
         return $this->belongsToMany('App\Stack');
     }

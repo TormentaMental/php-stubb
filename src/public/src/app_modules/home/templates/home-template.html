@@ -2,135 +2,36 @@
 
     <div class="main-column col-md-8">
 
-        <div class="new-card clearfix" ng-controller="FormController">
-            <form ng-submit="createCard()">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <textarea class="form-control margin-bottom-md" name="content" 
-                                  placeholder="{{ translations.write_something }}" ng-model="content" ng-keyup="autoExpand($event)"></textarea>
-                    </div>
-                </div> 
-
-                <button type="submit" class="btn btn-primary pull-right cast-shadow">Submit</button>
-            </form>
+        <div class="new-card clearfix">
+            <new-card-form></new-card-form>
         </div>
 
         <div id="cards-list" class="list" ng-controller="ListController">
             <div class="text-left">
-
-                <div class="form-group">
-                    <form>
-                        <label>                    
-                            <select ng-model="orderCardsBy" class="form-control">
-                                <option value="updated_at">Modified Date</option>
-                                <option value="name">Name</option>
-                            </select>
-                        </label> 
-
-                        <span class='v-separator'></span>
-
-                        <label>
-                            <input type="radio" ng-model="direction" name="direction" />
-                            asc
-                        </label>
-                        <label>
-                            <input type="radio" ng-model="direction" name="direction" value="reverse" checked />
-                            desc
-                        </label>
-                    </form>
+               
+                <div class="row">
+                    <div class="col-md-12">
+                        <order-by></order-by>
+                    </div>
                 </div>
                 
                 <div ng-if="context.cards">
-                    <div ng-repeat="card in context.filtered = (context.cards | filter: context.query | orderBy: orderCardsBy:direction)" 
-                         class="card"> 
-                        
-                        <div class="panel panel-default cast-shadow {{ card.class }}">                        
-                            <div class="panel-body" show-more show-more-height='150'>
-                                <div class="col-md-11"> 
-                                    <h3 ng-if="card.name" ng-bind-html="card.name | highlightText: context.query" hashtagify 
-                                        term-click="tagTermClick($event)" user-click="tagUserClick($event)"></h3> 
-                                    
-                                    <div class="card-content" ng-app="
-                                         "ng-bind-html="card.content | highlightText: context.query" hashtagify 
-                                         term-click="tagTermClick($event)" user-click="tagUserClick($event)"></div>
-                                </div>
-                                <div class="col-md-1 btn-group-vertical pull-right tools">
-                                    <button type="button" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-pushpin"></span></button>
-                                    <button type="button" class="btn btn-default btn-lg" ng-click="deleteCard(card)"><span class="glyphicon glyphicon-trash"></span></button>
-                                    <button type="button" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-pencil"></span></button>
-                                </div>
-                            </div>
-                            <div class="panel-footer">
-                                <ul class="text-right">
-                                    <li ng-repeat="tag in card.tags">
-                                        <a href="{{ tag.id }}">#{{ tag.name }}</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div ng-repeat="card in context.cards" 
+                        class="card {{ card.class }}" ng-class="{sticky: card.sticky}"> 
+                        <div card data="card"></div>
                     </div>
                 </div>
 
-                <div ng-if="!context.cards.length" class='panel panel-default'>
-                    <div class='panel-body no-results'>{{ translations.no_results}}</div>
+                <div ng-if="!context.cards.length" class='panel panel-default no-results'>
+                    <div class='panel-body' translate="translations.home.content.no_results"></div>
                 </div>
             </div>
-            <ul class="pagination pull-right">
-                <li><a href="#" class="active">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-            </ul>
+            
+            <paginate-cards ng-if="context.cards.length"></paginate-cards>
+            
         </div>
     </div>
 
-    <div class="side-column col-md-4">
-
-        <div class="panel panel-default" ng-controller="SearchController">
-            <div class="panel-body">
-                <form>
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
-                        </span>
-                        <input type="text" class="form-control cf" name="filter" placeholder="{{ translations.quick_search }}" aria-describedby="filter" 
-                               ng-model="context.query" />
-                    </div>                                        
-                </form>
-            </div>
-        </div>
-        
-        <div class="panel panel-default no-border stack-list" ng-controller="StackController">
-            <div class="panel-heading">
-                <h4>{{ translations.home.stackList.title }}</h4>
-            </div>
-            <div class="panel-body no-padding">
-                <ul class="list-group">
-                    <li class="list-group-item " ng-if="context.stacks" ng-repeat="stack in context.stacks">
-                        <a href="console.log({{ stack.id }})" class="col-md-6">
-                            <span class="name">{{ stack.name }}</span>
-                        </a>
-                        <ul class="participants col-md-6 text-right">
-                            <li ng-if="stack.participants.count > 0" ng-repeat="participant in stack.participants.list">
-                                <img src="/img/{{ participant.img }}" alt="participant" />
-                            </li>
-                            <li ng-if="stack.participants.count > 3">and {{ stack.participants.count - 3 }} more</li>
-                        </ul>
-                    </li>                 
-                </ul>
-            </div>
-        </div>
-        
-        <div class="panel panel-default tag-cloud" ng-controller="TagController" ang-if="context.tags">
-            <div class="panel-heading">
-                <h4>{{ translations.home.tagCloud.title }}</h4>
-            </div>
-            <div class="panel-body">
-                <ul class="list-unstyled list-inline">                  
-                    <li ng-repeat="tag in context.tags"><button class="btn btn-xs btn-info cast-shadow" >{{ tag.name }}</button></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <div ng-include src="'src/app_modules/home/templates/home-sidebar.html'"></div>
+    
 </div>

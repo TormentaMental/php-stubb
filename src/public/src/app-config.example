@@ -1,5 +1,7 @@
 angular.module("app.config", [])
 .constant("config", {
-	"api": "http://localhost:8001/api",
-	"debug": true
+	"api": "http://localhost:8001/api/v1",
+	"debug": true,
+        'IMG_FOLDER': 'img/',
+        'SRC_FOLDER': 'src/app_modules/'
 });

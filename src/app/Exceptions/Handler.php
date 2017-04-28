@@ -3,8 +3,19 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use function redirect;
+use function response;
+use function route;
 
 class Handler extends ExceptionHandler
 {
@@ -14,12 +25,12 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        \Illuminate\Auth\AuthenticationException::class,
-        \Illuminate\Auth\Access\AuthorizationException::class,
-        \Symfony\Component\HttpKernel\Exception\HttpException::class,
-        \Illuminate\Database\Eloquent\ModelNotFoundException::class,
-        \Illuminate\Session\TokenMismatchException::class,
-        \Illuminate\Validation\ValidationException::class,
+        AuthenticationException::class,
+        AuthorizationException::class,
+        HttpException::class,
+        ModelNotFoundException::class,
+        TokenMismatchException::class,
+        ValidationException::class,
     ];
 
     /**
@@ -38,21 +49,38 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Exception $exc)
     {
-        return parent::render($request, $exception);
+        if($request->expectsJson()) {
+            
+            Log::error($exc->getFile() . ' line: ' . $exc->getLine() . ' ' . $exc->getMessage());
+            
+            switch ($exc) {
+
+                case ($exc instanceof AuthorizationException):
+                    return response()->json(['error' => 'You are not authorized.'], 403);
+                    break;
+                case ($exc instanceof ModelNotFoundException):
+                    return response()->json(['error' => 'Resource not found.'], 404);
+                    break;
+                default:                    
+                    return response()->json(['error' => 'Internal error. Please check logs.'], 500);
+            }            
+        }
+        
+        return parent::render($request, $exc);
     }
 
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Auth\AuthenticationException  $exception
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @param  AuthenticationException  $exception
+     * @return Response
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
